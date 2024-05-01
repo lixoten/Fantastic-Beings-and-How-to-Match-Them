@@ -7,7 +7,7 @@ class Test extends StageTest {
     page = this.getPage(pagePath)
 
     tests = [
-        // Test#1 - check existence of map element
+        //Test#1 - check existence of map element
         this.page.execute(() => {
             this.map = document.getElementById('map');
 
@@ -15,54 +15,89 @@ class Test extends StageTest {
                 correct() :
                 wrong(`You need to create a table with the ID "map"`)
         }),
-        //Test#2 - check count of tds
-        this.node.execute(async () => {
-            const tds = await this.page.findAllBySelector('td');
-
-            return tds.length === 25 ?
-                correct() :
-                wrong(`The map must be 5x5.`);
-        }),
-        //Test#3 - check that map set class cell to the cells
+        //Test#2 - check that map set class cell to the cells
         this.node.execute(async () => {
             const cells = await this.page.findAllBySelector('.cell');
-
             return cells.length === 25 ?
                 correct() :
                 wrong(`Each cell of the map must have a 'cell' class.`);
         }),
-        //Test#4 - check rows count
+        //Test#3 - check render of beings function work
         this.node.execute(async () => {
-            const cells = await this.page.findAllBySelector('tr');
+            this.imgs = await this.page.findAllBySelector('img[data-coords]');
+            this.cells = await this.page.findAllBySelector('.cell[data-being]');
 
-            return cells.length === 5 ?
+            return this.imgs.length === 25 && this.cells.length === 25  ?
                 correct() :
-                wrong(`The map must have 5 rows in the table.`);
+                wrong(`Beings rendering method must fill all empty cells of the map. Now you have ${this.cells.length} cells and ${this.imgs.length} beings.`);
         }),
-        //Test#5 - check clearMap function
+        //Test#4 - check .cell[data-being] property
+        this.page.execute(() => {
+            let beings = ['zouwu', 'swooping', 'salamander', 'puffskein', 'kelpie'];
+            let cellObjects = document.getElementsByClassName('cell');
+            for(let c of cellObjects) {
+                if(!beings.includes(c.dataset.being)) {
+                    return wrong(`Each cell must have a dataset.being property, the value of which must be equal to the name of a random creature from a list of 5 possible creatures.
+                    We see that the property of one of the cells is equal to the value: ${c.dataset.being}`);
+                }
+            }
+            return correct();
+        }),
+        //Test#5 - check img[data-coords] property
+        this.page.execute(() => {
+            let imgObjs = document.querySelectorAll('img[data-coords]');
+            return imgObjs[5].dataset.coords === 'x0_y1' ?
+                correct() :
+                wrong(`Img objects inside the table have an invalid dataset.coords property.`)
+        }),
+        //Test#6 - check clearMap function
         this.page.execute(() => {
             if (window.clearMap instanceof Function) {
                 window.clearMap();
             } else {
                 return wrong(`Implement the window.clearMap() function, please.`)
             }
-
             this.cells = document.getElementsByClassName('cell');
             return this.cells.length === 0 ?
                 correct() :
                 wrong(`Check your window.clearMap() function, now after it works, not all map cells are cleared.`)
         }),
-        //Test#6 - check renderMap function
+        //Test#7 - check renderMap function
         this.page.execute(() => {
             if (window.renderMap instanceof Function) {
-                window.renderMap(3, 3);
+                window.renderMap(5, 5);
             } else {
                 return wrong(`Implement the window.renderMap() function, please.`)
             }
             this.cells = document.getElementsByClassName('cell');
-            return this.cells.length === 9 ?
+            return this.cells.length === 25 ?
                 correct() :
-                wrong(`Check your window.renderMap() function. When trying to draw a 3 by 3 map, it draws a map consisting of ${this.cells.length} cells.`)
+                wrong(`Check your window.renderMap() function. When trying to draw a 5 by 5 map, it draws a map consisting of ${this.cells.length} cells.`)
+        }),
+        //Test#8 - check window.redrawMap
+        this.page.execute(() => {
+            window.clearMap();
+            window.renderMap(3, 3);
+            window.redrawMap([
+                ['kelpie', 'zouwu', 'puffskein'],
+                ['swooping', 'zouwu', 'kelpie'],
+                ['kelpie', 'puffskein', 'puffskein']
+            ]);
+            let cellObjects = document.getElementsByClassName('cell');
+
+            return cellObjects[5].dataset.being === 'kelpie' && cellObjects[8].dataset.being === 'puffskein' ?
+                correct() :
+                wrong(`Check the window.redrawMap method - at the moment it does not add creatures to the positions specified in the array.`)
+        }),
+        //Test#9 - check window.redrawMap with wrong params
+        this.page.execute(() => {
+            let result = window.redrawMap([
+                ['kelpie', 'zouwu', 'puffskein'],
+            ]);
+
+            return result === false ?
+                correct() :
+                wrong(`Check the window.redrawMap method - it should return false if you pass the wrong array of creatures into it.`)
         }),
     ]
 
