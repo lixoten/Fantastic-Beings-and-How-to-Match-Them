@@ -36,4 +36,19 @@ body {
 img {
     width: 100%;
 }
-/*3*/
+
+
+.cell-selected {
+    /*background-image: url("images/cell-hover-bg.png");*/
+    background-image: url("images/cell-selected-bg.png");
+    background-size: cover;
+    /*background-position: center;*/
+}
+
+.cell:hover {
+    background-image: url("images/cell-hover-bg.png");
+    background-size: cover;
+    background-position: center;
+}
+
+/*4*/

@@ -2,6 +2,14 @@ import path from 'path';
 const pagePath = path.join(import.meta.url, '../../src/index.html');
 import {StageTest, correct, wrong} from 'hs-test-web';
 
+function sleep(milliseconds) {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+        currentDate = Date.now();
+    } while (currentDate - date < milliseconds);
+}
+
 class Test extends StageTest {
 
     page = this.getPage(pagePath)
@@ -18,6 +26,7 @@ class Test extends StageTest {
         //Test#2 - check that map set class cell to the cells
         this.node.execute(async () => {
             const cells = await this.page.findAllBySelector('.cell');
+
             return cells.length === 25 ?
                 correct() :
                 wrong(`Each cell of the map must have a 'cell' class.`);
@@ -50,7 +59,38 @@ class Test extends StageTest {
                 correct() :
                 wrong(`Img objects inside the table have an invalid dataset.coords property.`)
         }),
-        //Test#6 - check clearMap function
+        //Test#6 - check background of selected being
+        this.node.execute(async () => {
+            const being = await this.page.findBySelector('img[data-coords=x0_y0]');
+            await being.hover();
+
+            const cell = await this.page.findBySelector('.cell');
+            let style = await cell.getComputedStyles();
+
+            return style.backgroundImage.includes('cell-hover-bg')  ?
+                correct() :
+                wrong(`The clicked cell must have a background image. Now your backgroundImage: ${style.backgroundImage}`);
+        }),
+        //Test#7 - check click on non-neighboring cells
+        this.node.execute(async () => {
+            await this.page.refresh();
+            sleep(500);
+            const being1 = await this.page.findBySelector('img[data-coords=x0_y0]');
+            await being1.click();
+            const being2 = await this.page.findBySelector('img[data-coords=x2_y0]');
+            await being2.click();
+
+            this.cells = await this.page.findAllBySelector('.cell');
+            let style1 = await this.cells[0].getComputedStyles();
+            let style2 = await this.cells[2].getComputedStyles();
+            await this.page.refresh();
+            sleep(500);
+            return style1.backgroundImage.includes('cell-selected-bg') &&
+            style2.backgroundImage === 'none'  ?
+                correct() :
+                wrong(`When you click on one cell and the second click on another, non-adjacent cell, nothing should happen.`);
+        }),
+        //Test#8 - check clearMap function
         this.page.execute(() => {
             if (window.clearMap instanceof Function) {
                 window.clearMap();
@@ -62,7 +102,7 @@ class Test extends StageTest {
                 correct() :
                 wrong(`Check your window.clearMap() function, now after it works, not all map cells are cleared.`)
         }),
-        //Test#7 - check renderMap function
+        //Test#9 - check renderMap function
         this.page.execute(() => {
             if (window.renderMap instanceof Function) {
                 window.renderMap(5, 5);
@@ -74,30 +114,38 @@ class Test extends StageTest {
                 correct() :
                 wrong(`Check your window.renderMap() function. When trying to draw a 5 by 5 map, it draws a map consisting of ${this.cells.length} cells.`)
         }),
-        //Test#8 - check window.redrawMap
+        //Test#10 - check window.redrawMap
         this.page.execute(() => {
             window.clearMap();
             window.renderMap(3, 3);
             window.redrawMap([
-                ['kelpie', 'zouwu', 'puffskein'],
-                ['swooping', 'zouwu', 'kelpie'],
-                ['kelpie', 'puffskein', 'puffskein']
+                ['kelpie', 'puffskein', 'puffskein'],
+                ['swooping', 'zouwu', 'puffskein'],
+                ['kelpie', 'puffskein', 'zouwu']
             ]);
             let cellObjects = document.getElementsByClassName('cell');
 
-            return cellObjects[5].dataset.being === 'kelpie' && cellObjects[8].dataset.being === 'puffskein' ?
+            return cellObjects[5].dataset.being === 'puffskein' && cellObjects[8].dataset.being === 'zouwu' ?
                 correct() :
                 wrong(`Check the window.redrawMap method - at the moment it does not add creatures to the positions specified in the array.`)
         }),
-        //Test#9 - check window.redrawMap with wrong params
-        this.page.execute(() => {
-            let result = window.redrawMap([
-                ['kelpie', 'zouwu', 'puffskein'],
-            ]);
+        //Test#11 - check click on neighboring cells
+        this.node.execute(async () => {
+            const being1 = await this.page.findBySelector('img[data-coords=x1_y2]');
+            await being1.click();
+            const being2 = await this.page.findBySelector('img[data-coords=x2_y2]');
+            await being2.click();
+            sleep(500);
 
-            return result === false ?
-                correct() :
-                wrong(`Check the window.redrawMap method - it should return false if you pass the wrong array of creatures into it.`)
+            this.cells = await this.page.findAllBySelector('.cell[data-being]');
+            const neededCells = ['kelpie', 'puffskein', '', 'swooping', 'zouwu', '', 'kelpie', 'zouwu', ''];
+            for (let i = 0; i < this.cells.length; i++) {
+                if (await this.cells[i].getAttribute('data-being') !== neededCells[i]) {
+                    return wrong(`After clicking on adjacent elements, the resulting sequences of identical creatures should be removed.`);
+                }
+            }
+
+            return correct();
         }),
     ]
 
