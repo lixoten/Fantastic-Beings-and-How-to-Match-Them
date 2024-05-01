@@ -1,0 +1,59 @@
+<div class="step-text">
+<h5 id="description">Description</h5>
+<p>It's time to put creatures on the map! During the game, we should have two basic scenarios when creatures appear:</p>
+<ul>
+<li>When the game starts;</li>
+<li>When creatures are aligned — in this case, no need to redraw the entire field, only fill in the empty cells.</li>
+</ul>
+<p>In what order should the creatures be arranged? Random can take care of that! Fill the map with random animals from the list of 5: Zouwu, Swooping, Salamander, Puffskein, and Kelpie :)</p>
+<h5 id="objectives">Objectives</h5>
+<ul>
+<li>Based on this <a href="https://stepik.org/media/attachments/lesson/652720/beings.zip" rel="noopener noreferrer nofollow" target="_blank">graphic</a>, create an array of possible creatures that can be put on the map (there are 5 of them);</li>
+<li>Create a new method to randomly fill the map with creatures. The method should fill only the empty squares of the map. Remember that only one being can occupy one cell.</li>
+<li>Make the creatures appear on the map immediately after the map appears on the screen.</li>
+<li>Each cell must have a <code class="language-html">data-being</code> attribute in which you need to write the name of the creature that lives in that <code class="language-html">cell</code>.</li>
+<li>Each <code class="language-html">img</code> inside the <code class="language-html">cell</code> must have the <code class="language-html">data-coords</code> attribute, in which you need to enter its coordinate in the <code class="language-html">xN_yM</code> format - see the example for more details.</li>
+<li>Provide a special <code class="language-html">window.redrawMap</code> method for redrawing the map, which takes 1 parameter - array of creatures (size not less than 3x3). If the map is successfully rendered, the method should return <code class="language-html">true</code>, if the wrong parameter was passed for the map, then <code class="language-html">false</code>.</li>
+</ul>
+<h5 id="examples">Examples</h5>
+<p><strong>Example 1:</strong> <em>map before adding creatures</em></p>
+<pre><code class="language-html">...
+&lt;tr class="row"&gt;
+&lt;td class="cell"&gt;&lt;/td&gt;
+&lt;td class="cell"&gt;&lt;/td&gt;
+&lt;td class="cell"&gt;&lt;/td&gt;
+&lt;td class="cell"&gt;&lt;/td&gt;
+&lt;td class="cell"&gt;&lt;/td&gt;
+&lt;/tr&gt;
+...</code></pre>
+<p><em>map once the creatures have been added</em></p>
+<pre><code class="language-html">...
+&lt;tr class="row"&gt;
+&lt;td class="cell" data-being="kelpie"&gt;
+&lt;img data-coords="x0_y0" src="images/kelpie.png"&gt;
+&lt;/td&gt;
+&lt;td class="cell" data-being="kelpie"&gt;
+&lt;img data-coords="x1_y0" src="images/kelpie.png"&gt;
+&lt;/td&gt;
+&lt;td class="cell" data-being="puffskein"&gt;
+&lt;img data-coords="x2_y0" src="images/puffskein.png"&gt;
+&lt;/td&gt;
+&lt;td class="cell" data-being="kelpie"&gt;
+&lt;img data-coords="x3_y0" src="images/kelpie.png"&gt;
+&lt;/td&gt;
+&lt;td class="cell" data-being="swooping"&gt;
+&lt;img data-coords="x4_y0" src="images/swooping.png"&gt;
+&lt;/td&gt;
+&lt;/tr&gt;
+...</code></pre>
+<p><em>graphic representation of the game board</em></p>
+<p><picture><source media="(max-width: 480px)" srcset="https://ucarecdn.com/3574a475-9c48-495b-8353-ebc58a079c0d/-/stretch/off/-/resize/480x/-/format/webp/ 1x,https://ucarecdn.com/3574a475-9c48-495b-8353-ebc58a079c0d/-/stretch/off/-/resize/960x/-/format/webp/ 2x,https://ucarecdn.com/3574a475-9c48-495b-8353-ebc58a079c0d/-/stretch/off/-/resize/1440x/-/format/webp/ 3x" type="image/webp"/><source media="(max-width: 800px)" srcset="https://ucarecdn.com/3574a475-9c48-495b-8353-ebc58a079c0d/-/stretch/off/-/resize/800x/-/format/webp/ 1x,https://ucarecdn.com/3574a475-9c48-495b-8353-ebc58a079c0d/-/stretch/off/-/resize/1600x/-/format/webp/ 2x,https://ucarecdn.com/3574a475-9c48-495b-8353-ebc58a079c0d/-/stretch/off/-/resize/2400x/-/format/webp/ 3x" type="image/webp"/><source srcset="https://ucarecdn.com/3574a475-9c48-495b-8353-ebc58a079c0d/-/stretch/off/-/resize/1100x/-/format/webp/ 1x,https://ucarecdn.com/3574a475-9c48-495b-8353-ebc58a079c0d/-/stretch/off/-/resize/2200x/-/format/webp/ 2x,https://ucarecdn.com/3574a475-9c48-495b-8353-ebc58a079c0d/-/stretch/off/-/resize/3000x/-/format/webp/ 3x" type="image/webp"/><img alt=" Fantastic Beings and How to Match Them: 5x5 playing field with creatures" height="1442" name="localhost_63343_Fantastic%20Beings_Fantastic%20Beings_stage3_src_index.html__ijt=jgap32de1lrn3jf7o7up9c0otb.png" src="https://ucarecdn.com/3574a475-9c48-495b-8353-ebc58a079c0d/" width="2560"/></picture></p>
+<p><strong>Example 2: </strong><em>filling the map using the method </em><code class="language-html">window.redrawMap</code></p>
+<pre><code class="language-html">window.redrawMap([
+    ['kelpie', 'puffskein', 'puffskein'],
+    ['swooping', 'zouwu', 'puffskein'],
+    ['kelpie', 'puffskein', 'zouwu']
+]);</code></pre>
+<p><em>map once the creatures have been added</em> <em>by method above</em></p>
+<p><picture><source media="(max-width: 480px)" srcset="https://ucarecdn.com/f4196940-f39c-4c18-afad-de9d747b82e7/-/stretch/off/-/resize/480x/-/format/webp/ 1x,https://ucarecdn.com/f4196940-f39c-4c18-afad-de9d747b82e7/-/stretch/off/-/resize/960x/-/format/webp/ 2x,https://ucarecdn.com/f4196940-f39c-4c18-afad-de9d747b82e7/-/stretch/off/-/resize/1440x/-/format/webp/ 3x" type="image/webp"/><source media="(max-width: 800px)" srcset="https://ucarecdn.com/f4196940-f39c-4c18-afad-de9d747b82e7/-/stretch/off/-/resize/800x/-/format/webp/ 1x,https://ucarecdn.com/f4196940-f39c-4c18-afad-de9d747b82e7/-/stretch/off/-/resize/1600x/-/format/webp/ 2x,https://ucarecdn.com/f4196940-f39c-4c18-afad-de9d747b82e7/-/stretch/off/-/resize/2400x/-/format/webp/ 3x" type="image/webp"/><source srcset="https://ucarecdn.com/f4196940-f39c-4c18-afad-de9d747b82e7/-/stretch/off/-/resize/1100x/-/format/webp/ 1x,https://ucarecdn.com/f4196940-f39c-4c18-afad-de9d747b82e7/-/stretch/off/-/resize/2200x/-/format/webp/ 2x,https://ucarecdn.com/f4196940-f39c-4c18-afad-de9d747b82e7/-/stretch/off/-/resize/3000x/-/format/webp/ 3x" type="image/webp"/><img alt=" Fantastic Beings and How to Match Them: 3x3 playing field with creatures" height="1440" name="localhost_63342_Fantastic%20Beings_Fantastic%20Beings_stage3_src_index.html__ijt=il909kqv3as4s19fvn0ajc9h8d&amp;_ij_reload=RELOAD_ON_SAVE.png" src="https://ucarecdn.com/f4196940-f39c-4c18-afad-de9d747b82e7/" width="2560"/></picture></p>
+</div>

@@ -1,0 +1,31 @@
+<div class="step-text">
+<h5 id="description">Description</h5>
+<p>In this phase, we'll continue to add magic by introducing the first gameplay features.</p>
+<p>You'll develop the interaction between a user and the creatures: when a user clicks on two beings, they should swap places, match, and then disappear. Though we know you're an experienced spellcaster, you might still find <a href="https://hyperskill.org/learn/step/8723" rel="noopener noreferrer nofollow" target="_blank">events and their handlers </a>useful for achieving this.</p>
+<h5 id="objectives">Objectives</h5>
+<p>Here are the steps to implement the gameplay scenario:</p>
+<ul>
+<li>
+<p>After you draw the map and creatures, a cursor should highlight <a href="https://cogniterra.org/media/attachments/lesson/26274/cell-hover-bg.png" rel="noopener noreferrer nofollow" target="_blank">this frame</a> when it crosses a creature. Place it as the cell element's background;</p>
+</li>
+<li>
+<p>Upon clicking a creature, its frame should change to <a href="https://cogniterra.org/media/attachments/lesson/26274/cell-selected-bg.png" rel="noopener noreferrer nofollow" target="_blank">this</a> to indicate it's ready to swap places with its neighbors. Only creatures from cells above, below, right, or left are considered neighbors; diagonal creatures cannot participate in swapping;</p>
+</li>
+<li>
+<p>When you click a neighboring creature, the two selected creatures swap. If this swap results in at least one sequence of three identical creatures, it's a success; proceed to the next step. <strong>If not, return the creatures back to their original places</strong>;</p>
+</li>
+<li>
+<p>Look at how we handle sequences of identical creatures: clear the cells where the identical creatures are (more details in the example).</p>
+</li>
+<li>
+<p>After resolving the sequence, continue the game from step 2: select creatures -&gt; swap them -&gt; remove the creatures from the sequence.</p>
+</li>
+</ul>
+<h5 id="examples">Examples</h5>
+<p><strong>Example 1:</strong> <em>creature selection</em></p>
+<p><picture><source media="(max-width: 480px)" srcset="https://ucarecdn.com/80a4aab3-4a24-4116-a792-33a395a3ab0b/-/stretch/off/-/resize/480x/-/format/webp/ 1x,https://ucarecdn.com/80a4aab3-4a24-4116-a792-33a395a3ab0b/-/stretch/off/-/resize/960x/-/format/webp/ 2x,https://ucarecdn.com/80a4aab3-4a24-4116-a792-33a395a3ab0b/-/stretch/off/-/resize/1440x/-/format/webp/ 3x" type="image/webp"/><source media="(max-width: 800px)" srcset="https://ucarecdn.com/80a4aab3-4a24-4116-a792-33a395a3ab0b/-/stretch/off/-/resize/800x/-/format/webp/ 1x,https://ucarecdn.com/80a4aab3-4a24-4116-a792-33a395a3ab0b/-/stretch/off/-/resize/1600x/-/format/webp/ 2x,https://ucarecdn.com/80a4aab3-4a24-4116-a792-33a395a3ab0b/-/stretch/off/-/resize/2400x/-/format/webp/ 3x" type="image/webp"/><source srcset="https://ucarecdn.com/80a4aab3-4a24-4116-a792-33a395a3ab0b/-/stretch/off/-/resize/1100x/-/format/webp/ 1x,https://ucarecdn.com/80a4aab3-4a24-4116-a792-33a395a3ab0b/-/stretch/off/-/resize/2200x/-/format/webp/ 2x,https://ucarecdn.com/80a4aab3-4a24-4116-a792-33a395a3ab0b/-/stretch/off/-/resize/3000x/-/format/webp/ 3x" type="image/webp"/><img alt=" Fantastic Beings and How to Match Them: selecting creatures" height="1440" src="https://ucarecdn.com/80a4aab3-4a24-4116-a792-33a395a3ab0b/" width="2560"/></picture></p>
+<p><strong>Example 2:</strong> <em>swapping creatures and map clearing</em></p>
+<p><picture><source media="(max-width: 480px)" srcset="https://ucarecdn.com/f5f9bf65-a9d1-4d79-92b6-571d1080ca40/-/stretch/off/-/resize/480x/-/format/webp/ 1x,https://ucarecdn.com/f5f9bf65-a9d1-4d79-92b6-571d1080ca40/-/stretch/off/-/resize/960x/-/format/webp/ 2x,https://ucarecdn.com/f5f9bf65-a9d1-4d79-92b6-571d1080ca40/-/stretch/off/-/resize/1440x/-/format/webp/ 3x" type="image/webp"/><source media="(max-width: 800px)" srcset="https://ucarecdn.com/f5f9bf65-a9d1-4d79-92b6-571d1080ca40/-/stretch/off/-/resize/800x/-/format/webp/ 1x,https://ucarecdn.com/f5f9bf65-a9d1-4d79-92b6-571d1080ca40/-/stretch/off/-/resize/1600x/-/format/webp/ 2x,https://ucarecdn.com/f5f9bf65-a9d1-4d79-92b6-571d1080ca40/-/stretch/off/-/resize/2400x/-/format/webp/ 3x" type="image/webp"/><source srcset="https://ucarecdn.com/f5f9bf65-a9d1-4d79-92b6-571d1080ca40/-/stretch/off/-/resize/1100x/-/format/webp/ 1x,https://ucarecdn.com/f5f9bf65-a9d1-4d79-92b6-571d1080ca40/-/stretch/off/-/resize/2200x/-/format/webp/ 2x,https://ucarecdn.com/f5f9bf65-a9d1-4d79-92b6-571d1080ca40/-/stretch/off/-/resize/3000x/-/format/webp/ 3x" type="image/webp"/><img alt=" Fantastic Beings and How to Match Them: swapping creatures and clearing the map" height="1440" src="https://ucarecdn.com/f5f9bf65-a9d1-4d79-92b6-571d1080ca40/" width="2560"/></picture></p>
+<p><strong>Example 3:</strong> <em>gameplay</em></p>
+
+</div>

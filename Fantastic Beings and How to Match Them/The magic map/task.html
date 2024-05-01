@@ -1,0 +1,47 @@
+<div class="step-text">
+<h5 id="description">Description</h5>
+<p>Adding 25 cells to the HTML file was rather boring, wasn't it? In this stage, we will do a little magic trick: let's automate the creation of map cells with a JS script and make our game more flexible and universal by adding a configuration object.</p>
+<h5 id="objectives">Objectives</h5>
+<ul>
+<li>Make sure you've removed all table tag contents from your page; your HTML file will look something like this:</li>
+</ul>
+<pre><code class="java">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Fantastic Beings&lt;/title&gt;
+    &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id="board"&gt;
+    &lt;div id="status-bar"&gt;&lt;/div&gt;
+    &lt;table id="map"&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<ul>
+<li>Add a JS script to your page. It doesn't matter how you'll do it, but keep in mind that the amount of JS code will grow further on, so it makes sense to create a separate file for it.</li>
+<li>Implement a function with name <code class="java">window.renderMap</code> that dynamically fills the <code class="java">table</code> tag with the passed number of rows and columns. Each created cell, as in the previous stage, should have the <code class="java">cell</code> class. The function must take 2 input parameters: <code class="java">rowsCount</code> and <code class="java">colsCount</code> with which you can set the dimensions of the map. An example of calling this function:
+	<pre><code class="java">window.renderMap = function(rowsCount, colsCount) {
+    // Your code
+}
+
+// Call this function
+window.renderMap(rowsCount, colsCount);</code></pre>
+</li>
+<li>Once the HTML page is loaded, you need to call this method to draw the game field.</li>
+<li>Also, create a function to clear the game field: 
+	<pre><code class="java">window.clearMap = function() {
+    // Your code
+}
+
+window.clearMap();</code></pre>
+</li>
+<li>To make sure your method <code class="java">window.renderMap</code> is flexible and versatile, try experimenting with different values for the map dimensions but leave 5x5 as the final size.</li>
+</ul>
+<h5 id="examples">Examples</h5>
+<p><strong>Example 1</strong>: <em>10x10 grid configuration</em></p>
+<p><picture><source media="(max-width: 480px)" srcset="https://ucarecdn.com/f7ce1b19-3a8c-44f8-817e-4959a72368f0/-/stretch/off/-/resize/480x/-/format/webp/ 1x,https://ucarecdn.com/f7ce1b19-3a8c-44f8-817e-4959a72368f0/-/stretch/off/-/resize/960x/-/format/webp/ 2x,https://ucarecdn.com/f7ce1b19-3a8c-44f8-817e-4959a72368f0/-/stretch/off/-/resize/1440x/-/format/webp/ 3x" type="image/webp"/><source media="(max-width: 800px)" srcset="https://ucarecdn.com/f7ce1b19-3a8c-44f8-817e-4959a72368f0/-/stretch/off/-/resize/800x/-/format/webp/ 1x,https://ucarecdn.com/f7ce1b19-3a8c-44f8-817e-4959a72368f0/-/stretch/off/-/resize/1600x/-/format/webp/ 2x,https://ucarecdn.com/f7ce1b19-3a8c-44f8-817e-4959a72368f0/-/stretch/off/-/resize/2400x/-/format/webp/ 3x" type="image/webp"/><source srcset="https://ucarecdn.com/f7ce1b19-3a8c-44f8-817e-4959a72368f0/-/stretch/off/-/resize/1100x/-/format/webp/ 1x,https://ucarecdn.com/f7ce1b19-3a8c-44f8-817e-4959a72368f0/-/stretch/off/-/resize/2200x/-/format/webp/ 2x,https://ucarecdn.com/f7ce1b19-3a8c-44f8-817e-4959a72368f0/-/stretch/off/-/resize/3000x/-/format/webp/ 3x" type="image/webp"/><img alt="Fantastic Beings and How to Match Them: 10x10 playing field" height="1442" name="localhost_63343_Fantastic%20Beings_Fantastic%20Beings_stage2_src_index.html__ijt=sc03fj5l6tengtfvkuvl35j65j.png" src="https://ucarecdn.com/f7ce1b19-3a8c-44f8-817e-4959a72368f0/" width="2560"/></picture></p>
+<p><strong>Example 2:</strong> <em>3x3 configuration;</em> <em>the cell size adjusts automatically</em></p>
+<p><picture><source media="(max-width: 480px)" srcset="https://ucarecdn.com/ac7260e0-7018-4b0e-9480-65cd1a9718d3/-/stretch/off/-/resize/480x/-/format/webp/ 1x,https://ucarecdn.com/ac7260e0-7018-4b0e-9480-65cd1a9718d3/-/stretch/off/-/resize/960x/-/format/webp/ 2x,https://ucarecdn.com/ac7260e0-7018-4b0e-9480-65cd1a9718d3/-/stretch/off/-/resize/1440x/-/format/webp/ 3x" type="image/webp"/><source media="(max-width: 800px)" srcset="https://ucarecdn.com/ac7260e0-7018-4b0e-9480-65cd1a9718d3/-/stretch/off/-/resize/800x/-/format/webp/ 1x,https://ucarecdn.com/ac7260e0-7018-4b0e-9480-65cd1a9718d3/-/stretch/off/-/resize/1600x/-/format/webp/ 2x,https://ucarecdn.com/ac7260e0-7018-4b0e-9480-65cd1a9718d3/-/stretch/off/-/resize/2400x/-/format/webp/ 3x" type="image/webp"/><source srcset="https://ucarecdn.com/ac7260e0-7018-4b0e-9480-65cd1a9718d3/-/stretch/off/-/resize/1100x/-/format/webp/ 1x,https://ucarecdn.com/ac7260e0-7018-4b0e-9480-65cd1a9718d3/-/stretch/off/-/resize/2200x/-/format/webp/ 2x,https://ucarecdn.com/ac7260e0-7018-4b0e-9480-65cd1a9718d3/-/stretch/off/-/resize/3000x/-/format/webp/ 3x" type="image/webp"/><img alt="Fantastic Beings and How to Match Them: 3x3 playing field" height="1442" name="localhost_63343_Fantastic%20Beings_Fantastic%20Beings_stage2_src_index.html__ijt=sc03fj5l6tengtfvkuvl35j65j (2).png" src="https://ucarecdn.com/ac7260e0-7018-4b0e-9480-65cd1a9718d3/" width="2560"/></picture></p>
+</div>

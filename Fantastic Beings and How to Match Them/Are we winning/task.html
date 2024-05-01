@@ -1,0 +1,33 @@
+<div class="step-text">
+<h5 id="description"> Description</h5>
+<p>A samurai has no goal, only a path. This is not about us, as our game must have a goal — a condition for winning and losing :)</p>
+<p>The goal of our game is to match a certain number of beings for a certain number of moves. For example, collect 10 Kelpie and 20 Zouwu in 15 moves. Let's get down to implementation!</p>
+<h5 id="objectives">Objectives</h5>
+<ul>
+<li>Draw the status bar first: add <code class="language-html">Moves</code> and <code class="language-html">Score</code> as shown in the Examples section. Leave some space next to them, draw the values of these fields, and give them IDs: <code class="language-html">moves-value</code> and <code class="language-html">score-value</code>. Use the Marmelad font from the Google Fonts collection;</li>
+<li>Draw the left section of the status bar (bar ID - <code class="language-html">beings-for-win</code>); place the icons and the number of creatures you need to match to win there. The number of creatures should be placed in the span tag with the appropriate class, for example:</li>
+</ul>
+<pre><code class="language-html">&lt;span class="zouwu"&gt;3&lt;/span&gt;
+&lt;span class="kelpie"&gt;0&lt;/span&gt;</code></pre>
+<ul>
+<li>To win the game, you need to collect 3 Zouwu and 0 Kelpies in one move. These are the simplified conditions required for testing; you may set other conditions outside this stage. Calculate points as follows: 10 points for each matched creature;</li>
+<li>Create a new element at the bottom of the page that displays the game result (with the <code class="language-html">game-footer</code> id and <a href="https://stepik.org/media/attachments/lesson/652720/game-footer.png" rel="noopener noreferrer nofollow" target="_blank">this</a> background image). Use the Marmelad font from the Google Fonts collection. The initial value for this item is the game instruction:</li>
+</ul>
+<pre><code class="language-html">Swap animals to form a sequence of three in a row</code></pre>
+<ul>
+<li>Change the contents of the new element with a message about victory if the player managed to collect all the required creatures in a given number of moves or less:</li>
+</ul>
+<pre><code class="language-html">You won! Reload the page to start the game again.</code></pre>
+<ul>
+<li>Output the following message about the loss if there're no moves left, but the required number of creatures is yet to be reached:</li>
+</ul>
+<pre><code class="language-html">You lost! Reload the page to start the game again.</code></pre>
+<ul>
+<li>After winning or losing the game, a user should not be able to continue the game and select creatures on the map.</li>
+</ul>
+<h5 id="examples">Examples</h5>
+<p><strong>Example 1:</strong> <em>win condition</em></p>
+<p><picture><img alt=" Fantastic Beings and How to Match Them: win condition" height="1244" name="screencast 2021-12-29 12-33-26.gif" src="https://ucarecdn.com/9965247e-f670-4575-b390-659ebb6e874a/" width="2536"/></picture></p>
+<p><strong>Example 2:</strong> <em>lose condition</em></p>
+<p><picture><img alt=" Fantastic Beings and How to Match Them: lose condition" height="1244" name="screencast 2021-12-29 12-34-55.gif" src="https://ucarecdn.com/fa75c680-65bd-4881-8e00-4adeb4df664d/" width="2536"/></picture></p>
+</div>
