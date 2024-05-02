@@ -1,4 +1,4 @@
-//Stage 4
+//Stage 5.1
 class MyApp {
     possibleCreatureArray = [`zouwu`, `swooping`, `salamander`, `puffskein`, `kelpie`];
 
@@ -12,8 +12,6 @@ class MyApp {
     botNeighbor     = [];
     leftNeighbor    = [];
 
-    matchArray = []
-
     constructor() {
         this.rowsCount = 0;
         this.colsCount = 0;
@@ -24,16 +22,14 @@ class MyApp {
     reset() {
         this.firstClick = true;
         this.secondClick = false;
-        //this.home_x = false;
-        //this.home_y = false;
+
         this.selectedAddress = 0;
         this.neighborAddress = 0;
+
         this.leftNeighbor = 0;
         this.rightNeighbor = 0;
         this.topNeighbor = 0;
         this.botNeighbor = 0;
-
-        this.matchArray = []
     }
 
 
@@ -57,27 +53,42 @@ class MyApp {
 
                         tdElement.classList.add("cell-selected");
                     } else {
-                        if (this.isNeighbor(this.selectedAddress, r, c)) {
+                        let matchArray = [];
+                        this.neighborAddress = [r, c];
+                        if (this.isNeighbor(this.selectedAddress, this.neighborAddress)) {
                             this.secondClick = !this.secondClick
 
                             console.log("before "+ this.gameArray[this.selectedAddress[0]][this.selectedAddress[1]]);
                             console.log("before "+ this.gameArray[this.neighborAddress[0]][this.neighborAddress[1]]);
+
                             // Swap Creatures
                             this.creatureSwap(this.selectedAddress, this.neighborAddress)
-                            let possibleMove = this.matchBothNeighbors(this.selectedAddress, this.neighborAddress);
-                            if (!possibleMove) {
-                                this.creatureSwap(this.selectedAddress, this.neighborAddress)
-                                //     //return;
+                            // After swap, check if there is a match
+                            let matchFound = this.matchBothNeighbors(this.selectedAddress, this.neighborAddress);
+                            if (matchFound) {
+                                /*
+                                    --- Since a match was found, We check the whole board for matches. All matches that
+                                    are found are added to a "matchArray"
+                                    --- On a side note: Not only do we get matching creatures for selected and neighbor.
+                                    We also get any other matches that might be on the board.
+                                */
+                                matchArray = this.getAllMatches();
+                                this.updateGameArray(matchArray);
                             } else {
-                                this.matchArray = this.matchHorizonalAndVertical();
+                                // No match found we Swap back.
+                                this.creatureSwap(this.selectedAddress, this.neighborAddress)
                             }
-                            // console.log(possibleMove);
+
                             console.log("after "+ this.gameArray[this.selectedAddress[0]][this.selectedAddress[1]]);
                             console.log("after "+ this.gameArray[this.neighborAddress[0]][this.neighborAddress[1]]);
 
-
-                            this.redrawMap(this.gameArray); // Populate the map with creatures.
-
+                            // note-: stage 5
+                            do {
+                                this.redrawMap(this.gameArray); // Populate the map with creatures.
+                                // After we redraw, we check for new matches. when blanks are filled the may generate new matches
+                                matchArray = this.getAllMatches();
+                                this.updateGameArray(matchArray);
+                            } while (matchArray.length > 0)
                         }
                     }
                 })
@@ -87,6 +98,25 @@ class MyApp {
             this.mapElement.appendChild(trElement);
         }
     }
+
+    updateGameArray(matchArray) {
+        for (let r = 0; r < this.gameArray.length; r++) {
+
+            for (let c = 0; c < this.gameArray[r].length; c++) {
+                if (arrayExistsInArray([r, c], matchArray)) {
+                    this.gameArray[r][c] = null;
+                }
+            }
+        }
+
+        function arrayExistsInArray(arrayToCheck, arrayOfArrays) {
+            return arrayOfArrays.some(subArray =>
+                subArray.length === arrayToCheck.length &&
+                subArray.every((value, index) => value === arrayToCheck[index])
+            );
+        }
+    }
+
 
     redrawMap(gameArray) {
         if (gameArray.length < 3) {
@@ -109,47 +139,32 @@ class MyApp {
             for (let c = 0; c < this.gameArray[r].length; c++)  {
                 const cell = row.cells[c];
 
-                // note-: reset after swap
                 cell.className = "cell";
                 cell.innerHTML = "";
 
-                if (arrayExistsInArray([r, c], this.matchArray)) {
-                    cell.className = "cell";
-                    cell.dataset.being = ""; // note-: Key line to pass Stage 4, Test #11
+                if (this.gameArray[r][c] === null) {
+                    // note-: stage 5
+                    const newRandImage = this.generateRandomBeingName();
+                    this.gameArray[r][c] = newRandImage;
                     cell.style.backgroundColor = "pink";
-
-                    // note-: Kept image in cell so cell won't collapse when all match
-                    //        just visibility:hidden.
-                    //        If we remove the image in this scenerio the row or column will collapse
-                    const imgElement = document.createElement('img');
-                    imgElement.src = `images/${this.gameArray[r][c]}.png`;
-                    imgElement.style = "visibility:hidden"
-                    cell.appendChild(imgElement);
-
-                    continue
-                    //console.log("The array exists within the array of arrays.");
                 }
-                // else {
-                //console.log("The array does not exist within the array of arrays.");
-                // }
 
+                //cell.dataset.being = ""; // note-: Key line to pass Stage 4, Test #11.
                 cell.dataset.being = this.gameArray[r][c];
                 const imgElement = document.createElement('img');
                 imgElement.src = `images/${this.gameArray[r][c]}.png`;
                 imgElement.dataset.coords = `x${c}_y${r}`;
-                cell.innerHTML = "";
                 cell.appendChild(imgElement);
             }
         }
         this.reset();
+    }
 
-        function arrayExistsInArray(arrayToCheck, arrayOfArrays) {
-            return arrayOfArrays.some(subArray =>
-                subArray.length === arrayToCheck.length &&
-                subArray.every((value, index) => value === arrayToCheck[index])
-            );
-        }
+    // note-: stage 5
+    generateRandomBeingName() {
+        const j = Math.floor(Math.random() * (this.possibleCreatureArray.length));
 
+        return this.possibleCreatureArray[j];
     }
 
     clearMap() {
@@ -162,26 +177,13 @@ class MyApp {
         this.gameArray[neighbor[0]][neighbor[1]] = tempHold;
     }
 
-    isNeighbor(address, r, c) {
-        //home_x = r;
-        //home_y = c;
-
-        //setNeighbors(r, c);
-
-        [this.topNeighbor, this.rightNeighbor, this.botNeighbor, this.leftNeighbor] = this.getNeighbors(address);// getAddress(address);
-
-        // The LAST click
-        this.neighborAddress = [r, c];
+    isNeighbor(address, neighborAddress) {
+        [this.topNeighbor, this.rightNeighbor, this.botNeighbor, this.leftNeighbor] = this.getNeighbors(address);
 
         const neighbors = [this.topNeighbor, this.rightNeighbor, this.botNeighbor, this.leftNeighbor];
-        //return neighbors.includes(secondAddress); .// Does not work for arrays...make a function for it
-        return isArrayIncluded(this.neighborAddress, neighbors);
 
-        // if (clickedAddress === leftNeighbor || clickedAddress === rightNeighbor || clickedAddress === topNeighbor || clickedAddress === botNeighbor){
-        //     return true;
-        // } else {
-        //     return false;
-        // }
+        return isArrayIncluded(neighborAddress, neighbors);
+
         function isArrayIncluded(creatureAddress, neighbors) {
             return neighbors.some(item => item.length === creatureAddress.length && item.every((value, index) => value === creatureAddress[index]));
         }
@@ -201,27 +203,18 @@ class MyApp {
     }
 
     /*
-    For every piece
-        check if previous two pieces are same color
-        if true, destroy those three pieces.
-        for every piece after that, if current color == destroyed color, destroy it. If not, break out of the loop.
-        If it's possible to have more than one set of three at once in a single row (e.g. 3 reds then 3 blues), you'll have to run the loop multiple times until it doesn't destroy anything.
+    Get All Matches both Vertical and Horizontal. No Diagonal matched per requirements
+        and return a unique array of all matches found.
     */
-    matchHorizonalAndVertical() {
-        //let matchArray = [];
-        let rowIndex = 0;//creatureIndexes[0];
-        //let colIndex = 0;//creatureIndexes[1];
-        //let creatureType = this.gameArray[rowIndex][colIndex];
-        const mySet = new Set();
-
+    getAllMatches() {
+        const myArray = [];
         for (let rowIndex = 0; rowIndex < this.gameArray.length; rowIndex++) {
             for (let c = 0; c < this.gameArray[rowIndex].length - 2; c++) {
                 if (this.gameArray[rowIndex][c] === this.gameArray[rowIndex][c + 1] &&
                     this.gameArray[rowIndex][c] === this.gameArray[rowIndex][c + 2]) {
-                    //this.gameArray[rowIndex][c + 1] === this.gameArray[rowIndex][c + 2]) {
-                    mySet.add([rowIndex, c]);
-                    mySet.add([rowIndex, c + 1]);
-                    mySet.add([rowIndex, c + 2]);
+                    myArray.push([rowIndex, c]);
+                    myArray.push([rowIndex, c + 1]);
+                    myArray.push([rowIndex, c + 2]);
                 }
             }
         }
@@ -229,16 +222,20 @@ class MyApp {
             for (let r = 0; r < this.gameArray[0].length - 2; r++) {
                 if (this.gameArray[r][colIndex] === this.gameArray[r + 1][colIndex]  &&
                     this.gameArray[r][colIndex] === this.gameArray[r + 2][colIndex]) {
-                    mySet.add([r, colIndex]);
-                    mySet.add([r + 1, colIndex]);
-                    mySet.add([r + 2, colIndex]);
+                    myArray.push([r, colIndex]);
+                    myArray.push([r + 1, colIndex]);
+                    myArray.push([r + 2, colIndex]);
                 }
             }
         }
 
-        return Array.from(mySet);
-        // const tempArray = Array.from(mySet);
-        // return tempArray.map(JSON.parse);
+        // Remove Duplicates from Array using Set
+        let uniqueSet = new Set(myArray.map(JSON.stringify));
+        let uniqueArray = Array.from(uniqueSet);
+        console.log('-passed ' + uniqueArray)
+        let finalUniqueArray = uniqueArray.map(JSON.parse);
+
+        return finalUniqueArray;
     }
 
     matchBothNeighbors(address1, address2) {
@@ -356,6 +353,11 @@ window.renderMap = function(rowsCount, colsCount) {
 window.redrawMap = function(gameArray) {
     return myApp.redrawMap(gameArray);
 };
+// note-: stage 5
+window.generateRandomBeingName = function() {
+    return myApp.generateRandomBeingName();
+};
+
 
 window.clearMap();
 window.renderMap(5, 5);

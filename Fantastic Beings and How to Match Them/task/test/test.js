@@ -69,7 +69,7 @@ class Test extends StageTest {
 
             return style.backgroundImage.includes('cell-hover-bg')  ?
                 correct() :
-                wrong(`The clicked cell must have a background image. Now your backgroundImage: ${style.backgroundImage}`);
+                wrong(`The clicked cell must have a background image.`);
         }),
         //Test#7 - check click on non-neighboring cells
         this.node.execute(async () => {
@@ -120,25 +120,32 @@ class Test extends StageTest {
             window.renderMap(3, 3);
             window.redrawMap([
                 ['kelpie', 'puffskein', 'puffskein'],
-                ['swooping', 'zouwu', 'puffskein'],
+                ['zouwu', 'zouwu', 'puffskein'],
                 ['kelpie', 'puffskein', 'zouwu']
             ]);
             let cellObjects = document.getElementsByClassName('cell');
 
+            window.generateRandomBeingName = function() {
+                if (!window.generateNameFlag) window.generateNameFlag = 1;
+                window.generateNameFlag++;
+                let being = generateNameFlag % 2 === 0 ? 'puffskein' : 'zouwu';
+                return being;
+            }
             return cellObjects[5].dataset.being === 'puffskein' && cellObjects[8].dataset.being === 'zouwu' ?
                 correct() :
                 wrong(`Check the window.redrawMap method - at the moment it does not add creatures to the positions specified in the array.`)
         }),
         //Test#11 - check click on neighboring cells
         this.node.execute(async () => {
+
             const being1 = await this.page.findBySelector('img[data-coords=x1_y2]');
             await being1.click();
             const being2 = await this.page.findBySelector('img[data-coords=x2_y2]');
             await being2.click();
-            sleep(500);
+            sleep(1500);
 
             this.cells = await this.page.findAllBySelector('.cell[data-being]');
-            const neededCells = ['kelpie', 'puffskein', '', 'swooping', 'zouwu', '', 'kelpie', 'zouwu', ''];
+            const neededCells = ['kelpie', 'puffskein', 'puffskein', 'zouwu', 'puffskein', 'zouwu', 'kelpie', 'zouwu', 'puffskein'];
             for (let i = 0; i < this.cells.length; i++) {
                 if (await this.cells[i].getAttribute('data-being') !== neededCells[i]) {
                     return wrong(`After clicking on adjacent elements, the resulting sequences of identical creatures should be removed.`);
